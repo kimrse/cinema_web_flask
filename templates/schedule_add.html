@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block url %}
+  <a class="head btn-hd" href="{{url_for('index')}}">Movies</a>
+  <a class="head btn-hd" href="{{url_for('schedule')}}">Schedule</a>
+  <a class="head btn-hd btn-selected" href="{{url_for('schedule_add')}}">Add Schedule</a>
+  <a class="head btn-hd" href="{{url_for('movie_add')}}">Add Movie</a>
+{% endblock %}
+
+{% block body %}
+
+  <div class="block sch-form">
+    <form action="{{ url_for('sch_added') }}" method="post">
+			<div class="title">
+				<h4>Choose movie:</h4>
+				<label for="title-box">Title:</label>
+				{{value_box(combo_box, "title-box", "movie_name")}}
+			</div>
+			<div class="date">
+				<h4>Choose date and time:</h4>
+				<label for="date">Session date:</label>
+				{{value_box(date_box, "date", "date")}}
+				<label for="hour">Hour:</label>
+				<input type="number" name="hour" id="hour" min="9" max="23" value="9">
+				<label for="minute">Minute:</label>
+				<input type="number" name="minute" id="minute" min="0" max="55" step="5" value="0">
+			</div>
+			<div class="hall">
+				<h4>Choose theater hall:</h4>
+				{% for i in range(len(radio_box)) %}
+					{% set hall_name = radio_box.loc[i, "hall_name"] %}
+					<label for="{{hall_name}}">{{hall_name}}</label>
+					<input type="radio" name="hall-radio" id="{{hall_name}}" value="{{hall_name}}"><br>
+				{% endfor %}
+			</div>
+			<div class="price">
+				<h4>Choose prices:</h4>
+				<label for="price-std">Standart price:</label>
+				{{value_box(price_box, "price-std", "price_list_price")}}<br>
+				<label for="price-vip">VIP price:</label>
+				{{value_box(price_box, "price-vip", "price_list_price")}}<br>
+				<label for="price-coach">Couch price:</label>
+				{{value_box(price_box, "price-coach", "price_list_price")}}<br>
+			</div>
+			<input class="btn btn-sch" type="submit" value="Add movie to the schedule">
+		</form>
+  </div>
+
+{% endblock %}

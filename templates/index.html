@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block url %}
+  <a class="head btn-hd btn-selected" href="{{url_for('index')}}">Movies</a>
+  <a class="head btn-hd" href="{{url_for('schedule')}}">Schedule</a>
+  <a class="head btn-hd" href="{{url_for('schedule_add')}}">Add Schedule</a>
+  <a class="head btn-hd" href="{{url_for('movie_add')}}">Add Movie</a>
+{% endblock %}
+
+{% block body %}
+
+{% for id in range(len(name)) %}
+	<div class="movie short">
+    <div class="short-info">
+      <h1>{{name[id]}}</h1>
+      <h5>Length: </h5><p>{{duration[id]}} Min.</p>
+      <h5>Age restriction: </h5><p>{{restriction[id]}}.</p>
+      <h5>Genres: </h5>
+      {{render_all(genres, id)}}
+      <h5>Director: </h5>
+      <p>{{director[id]}}.</p>
+      <h5>Actors: </h5>
+      {{render_all(actors, id)}}
+      <h5>Description: </h5>
+      <p>{{description[id]}}</p>
+    </div>
+    <div class="short-form-btn">
+		<form action="{{url_for('movie')}}" method="get">
+			<input type="hidden" name="title" value="{{name[id]}}">
+			<input class="btn btn-movie" type="submit" value="Select">
+		</form>
+    </div>
+	</div>
+{% endfor %}
+
+{% endblock %}

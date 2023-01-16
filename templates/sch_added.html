@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  <div class="block">
+	<h1>The movie succesfully added to the schedule and tickets are generated !</h1>
+
+		<h3>Added values:</h3>
+    time:{{time}}<br>
+    date:{{date}}<br>
+    hall:{{hall_name}}<br>
+    movie:{{movie_name}}<br>
+    std:{{stand_price}}<br>
+    vip:{{vip_price}}<br>
+		coach:{{coach_price}}<br>
+		
+		<h3>Added values IDs:</h3>
+    movie:{{movie_id}}<br>
+    hall:{{hall_id}}<br>
+    date:{{date_id}}<br>
+    std:{{std_id}}<br>
+    vip:{{vip_id}}<br>
+    coach:{{coach_id}}<br>
+		last id:{{sch_id}}
+  </div>
+{% endblock %}

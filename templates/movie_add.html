@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block url %}
+  <a class="head btn-hd" href="{{url_for('index')}}">Movies</a>
+  <a class="head btn-hd" href="{{url_for('schedule')}}">Schedule</a>
+  <a class="head btn-hd" href="{{url_for('schedule_add')}}">Add Schedule</a>
+  <a class="head btn-hd btn-selected" href="{{url_for('movie_add')}}">Add Movie</a>
+{% endblock %}
+
+{% block body %}
+
+<div class="block sch-form">
+  <h2>Add new movie</h2>
+  <form action="" method="POST" enctype="multipart/form-data">
+    <div class="add-inf tit">
+      <label for="add_title">Title: </label>
+      <input type="text" name="add_title" id="add_title"><br>
+    </div>
+    <div class="add-inf dur">
+      <label for="add_dur">Duration (in minutes): </label>
+      <input type="number" name="add_dur" id="add_dur" min="15" max="500"><br>
+    </div>
+    <div class="add-inf select">
+      <label for="add_age">Select age restriction: </label>
+      {{movie_box(age, "add_age", "age_id", "age_restriction")}}
+    </div>
+    <div class="add-inf rate">
+      <label for="add_rating">Movie rating: </label>
+      <input type="number" name="add_rating" id="add_rating" min="0" max="100">
+    </div>
+    <div class="add-inf chkbox">
+      <label>Select genres: </label><br>
+      <div class="chk gen">
+        {{checkbox(genre, "add_genre", "genre_id", "genre_name")}}
+      </div>
+    </div>
+    <div class="add-inf select">
+      <label for="add_dir">Select director: </label>
+      {{movie_box(director, "add_dir", "director_id", "director_name")}}<br>
+    </div>
+    <div class="add-inf chkbox">
+      <label>Select actors: </label><br>
+      <div class="chk">
+        {{checkbox(actor, "add_actor", "actor_id", "actor_name")}}
+      </div>
+    </div>
+    <div class="add-inf desc">
+      <label for="add_description">Write description: </label><br>
+      <input type="text" name="add_description" id="add_description">
+    </div>
+    <div class="add-inf upl">
+      <div>
+      <label for="add-inf add_poster">Upload poster image: </label>
+        <input type="file" name="add_poster" id="add_poster"><br>
+      </div>
+      <div>
+        <input class="btn btn-sch" type="submit" value="Add movie">
+      </div>
+    </div>
+  </form>
+</div>
+<div class="block sch-form add-db">
+  <h2>Add new actors, directors, genres to DataBase</h2>
+  <div>
+    <form action="" method="POST">
+      <label for="new_actor">New actor: </label>
+      <input type="text" name="new_actor" id="new_actor">
+      <input class="btn" type="submit" value="Add">
+    </form>
+  </div>
+  <div>
+    <form action="" method="POST">
+      <label for="new_director">New director: </label>
+      <input type="text" name="new_director" id="new_director">
+      <input class="btn" type="submit" value="Add">
+    </form>
+  </div>
+  <div>
+    <form action="" method="POST">
+      <label for="new_genre">New genre: </label>
+      <input type="text" name="new_genre" id="new_genre">
+      <input class="btn" type="submit" value="Add">
+    </form>
+  </div>
+</div>
+{% endblock %}

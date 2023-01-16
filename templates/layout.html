@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Kino</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+		{% macro value_box(box, name, value_col) %}
+			<select name={{name}} id={{name}} method="post">
+				{% set n = len(box) %}
+        {% for i in range(n) %}
+          <option value="{{box.loc[i, value_col]}}">
+            {{box.loc[i, value_col]}}
+          </option>
+        {% endfor %}
+			</select>
+		{% endmacro %}
+
+    {% macro movie_box(box, name, id_col, val_col) %}
+    {% set n = len(box) %} 
+    <select name="{{name}}" id="{{name}}">
+      {% for i in range(n) %}
+        {% set id = box.loc[i, id_col] %} 
+            {% if id == id_col %}
+              <option selected value={{id}}>
+            {% else %}
+              <option value={{id}}>
+            {% endif %} 
+            {{ box.loc[i, val_col] }}
+          </option>
+      {% endfor %} 
+    </select>
+    {% endmacro %}
+
+    {% macro checkbox(box, name, id_col, val_col) %}
+      {% for i in range(len(box)) %}
+        {% set id = box.loc[i, id_col] %}
+        <div class="chk-opt">
+          <input type="checkbox" name="{{name}}" id="{{name}}_{{id}}" value="{{id}}">
+          <label for="{{name}}_{{id}}">{{box.loc[i, val_col]}}</label>
+        </div>
+      {% endfor %}
+    {% endmacro %}
+
+		{% macro render_all(list, id)%}
+			<p>
+				{% for i in range(len(list[id])) %}
+					{% for j in range(len(list[id][i])) %}
+						{% if list[id][i][j] == list[id][-1][j] %}
+							{{list[id][i][j]}}.
+						{% else %}
+							{{list[id][i][j]}},
+						{% endif %}    
+					{% endfor %}
+				{% endfor %}
+			</p>
+		{% endmacro %}
+		
+		{% macro render_movie(list) %}
+			<p>
+				{% for i in range(len(list)) %}
+					{% for j in range(len(list[i])) %}
+						{% if list[i][j] == list[-1][j] %}
+							{{list[i][j]}}.
+						{% else %}
+							{{list[i][j]}},
+						{% endif %}    
+					{% endfor %}    
+				{% endfor %}
+			</p>
+		{% endmacro %}
+
+    {% macro fill_schedule(schedule_std, schedule_vip, schedule_coach) %}
+      {% for z in range(len(schedule)) %}
+      {% if schedule.loc[z, "date"] == date[i][0] %}
+        {% if schedule.loc[z, "hall_name"] == hall[j][0] %}
+          <tr>
+            <td>{{schedule.loc[z, "schedule_time"]}}</td>
+            <td>{{schedule.loc[z, "movie_name"]}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        {% endif %}
+      {% endif %}
+      {% endfor %}
+    {% endmacro %}
+
+
+  {% macro render_ticket(relation, type) %}
+  {% set n = len(relation) %}
+  <table>
+    <tr>
+      {% for name in relation.dtypes.index %}
+        {% if name != "price_id" and name != "ticket_sold" %}
+          <th>{{name}}</th>
+        {% endif %}
+      {% endfor %}
+    </tr>
+    <tbody>
+      {% for i in range(n) %}
+      {% if relation.loc[i, 'Place_type'] == type %}
+        <tr>
+          {% for name in relation.dtypes.index %}
+          {% if name != "price_id" and name != "ticket_sold" %} 
+            <td>{{ relation.loc[i, name] }}</td>
+          {% endif %}
+          {% endfor %}
+          <td>
+            {% if relation.loc[i, 'ticket_sold'] == 0 %}
+              <form action="">
+                <input type="hidden" name="sold_id" value="{{relation.loc[i, 'price_id']}}">
+                <input type="hidden" name="sold_numb" value="{{relation.loc[i, 'Place_number']}}">
+                <input type="hidden" name="sold_price" value="{{relation.loc[i, 'Price']}}">
+                <input class="btn btn-buy2" type="submit" value="Buy ticket">
+              </form>
+            {% else %}
+              <span class="sold">Ticket sold !</span>
+            {% endif %}
+          </td> 
+        </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endmacro %}
+
+	</head>
+	<body>
+		<header>
+      {% block url %}
+      <a class="head btn-hd" href="{{url_for('index')}}">Movies</a>
+      <a class="head btn-hd" href="{{url_for('schedule')}}">Schedule</a>
+      <a class="head btn-hd" href="{{url_for('schedule_add')}}">Add Schedule</a>
+      <a class="head btn-hd" href="{{url_for('movie_add')}}">Add Movie</a>
+      {% endblock %}
+		</header>
+		<main>
+			{% block body %}
+			{% endblock %}
+		</main>
+	</body>
+</html>

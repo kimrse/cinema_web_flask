@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% block url %}
+  <a class="head btn-hd" href="{{url_for('index')}}">Movies</a>
+  <a class="head btn-hd btn-selected" href="{{url_for('schedule')}}">Schedule</a>
+  <a class="head btn-hd" href="{{url_for('schedule_add')}}">Add Schedule</a>
+  <a class="head btn-hd" href="{{url_for('movie_add')}}">Add Movie</a>
+{% endblock %}
+
+{% block body %}
+
+  <div class="schedule">
+    <h1 class="block">Movie schedule</h1>
+    <div class="sch-date">
+		{% for i in range(len(date)) %}
+		<div class="date">
+			<h2>Date: {{date[i][0]}}</h2>
+      <div class="halls">
+        {% for j in range(len(hall)) %}	
+        <div class="hall">
+          <h3>{{hall[j][0]}}</h3>
+          <div class="table-cont">
+            <table>
+              <tbody>
+                <tr>
+                  <th>Time</th>
+                  <th>Movie</th>
+                  <th>Price</th>
+                  <th></th>
+                </tr>
+                {% for z in range(len(schedule)) %}
+                  {% if schedule.loc[z, "date"] == date[i][0] %}
+                    {% if schedule.loc[z, "hall_name"] == hall[j][0] %}
+                      <tr>
+                        <td>{{schedule.loc[z, "schedule_time"]}}</td>
+                        <td>{{schedule.loc[z, "movie_name"]}}</td>
+                        <td>{{schedule.loc[z, "price_list_price"]}}+ Rub.</td>
+                        <td>
+                          <form action="{{ url_for('ticket') }}" method="post">
+                            <input type="hidden" name="ticket-name" value="{{schedule.loc[z, 'movie_name']}}">
+                            <input type="hidden" name="ticket-date" value="{{schedule.loc[z, 'date']}}">
+                            <input type="hidden" name="ticket-time" value="{{schedule.loc[z, 'schedule_time']}}">
+                            <input type="hidden" name="ticket-hall" value="{{schedule.loc[z, 'hall_name']}}">
+                            <input type="hidden" name="ticket-price" value="{{schedule.loc[z, 'price_list_price']}}">
+                            <input class="btn btn-buy" type="submit" value="Buy ticket">
+                          </form>
+                        </td>
+                      </tr>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      </div>
+      {% endfor %}
+      </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="movie">
+  <div class="poster-info">
+    <h1>{{title}}</h1>
+    <div class="main-info">
+    <div class="poster">
+      {% if poster == None %}
+        <img src="/static/posters/default.jpg">
+      {% else %}	
+        <img src="{{poster}}">
+      {% endif %}	
+    </div>
+    <div class="movie-info-box">
+      <div class="movie-info">
+        <h4>Movie info:</h4>
+        <h5>Length: </h5><p>{{duration}} Min.</p>
+        <h5>Age restriction: </h5>
+        <p>{{restriction}}.</p>
+        <h5>Revenue: </h5>
+        {{revenue}} Rub.
+        <h5>Rating: </h5>
+        {{rating}} / 100
+        <h5>Genres: </h5>
+        {{render_movie(genres)}}
+        <h5>Director: </h5>
+        <p>{{director}}.</p>
+        <h5>Actors: </h5>
+        {{render_movie(actors)}}
+      </div>
+    </div>
+    </div>
+    <div class="movie-desc">
+      <h5>Description: </h5>
+      <p>{{description}}</p>
+    </div>
+  </div>
+  
+  <div class="movie-schedule">
+    <h2 style="width: 1000px">Movie schedule:</h2>
+	{% for i in range(len(dates)) %}
+  <div class="sch-table">
+		<div class="day-title">
+			<h3>{{weekday_dict[dates.loc[i, "weekday"]]}}, {{dates.loc[i, "date"]}}</h3>
+		</div>
+		<div class="table-cont">
+			<table>
+				<tbody>
+					<tr>
+						<th>Time</th>
+						<th>Hall</th>
+						<th>Price</th>
+						<th></th>
+					</tr>
+					{% for j in range(len(schedule)) %}
+						{% if dates.loc[i, "date"] ==  schedule.loc[j, "date"] %}
+							<tr>
+								<td>{{schedule.loc[j, "schedule_time"]}}</td>
+								<td>{{schedule.loc[j, "hall_name"]}}</td>
+								<td>{{schedule.loc[j, "price_list_price"]}}+ Rub.</td>
+								<td>
+									<form action="{{ url_for('ticket') }}" method="post">
+										<input type="hidden" name="ticket-name" value="{{title}}">
+										<input type="hidden" name="ticket-date" value="{{schedule.loc[j, 'date']}}">
+										<input type="hidden" name="ticket-time" value="{{schedule.loc[j, 'schedule_time']}}">
+										<input type="hidden" name="ticket-hall" value="{{schedule.loc[j, 'hall_name']}}">
+										<input type="hidden" name="ticket-price" value="{{schedule.loc[j, 'price_list_price']}}">
+										<input class="btn btn-buy" type="submit" value="Buy ticket">
+									</form>
+								</td>
+							</tr>
+						{% endif %}
+					{% endfor %}
+				</tbody>
+			</table>
+  </div>
+</div>
+	{% endfor %}
+</div>
+<div class="del-wrap">
+  <form class="del-form" action="">
+    <input type="hidden" name="delete" value="{{title}}">
+    <input class ="btn btn-del" type="submit" value="Delete movie">
+  </form>
+</div>
+{% endblock %}
